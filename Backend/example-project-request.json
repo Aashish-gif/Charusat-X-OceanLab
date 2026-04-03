@@ -1,0 +1,34 @@
+{
+  "projectName": "My Cloud Infrastructure",
+  "nodes": [
+    {
+      "id": "1",
+      "type": "ec2",
+      "position": { "x": 100, "y": 100 },
+      "data": {
+        "label": "Web Server",
+        "type": "EC2"
+      }
+    },
+    {
+      "id": "2",
+      "type": "s3",
+      "position": { "x": 300, "y": 100 },
+      "data": {
+        "label": "Storage Bucket",
+        "type": "S3"
+      }
+    },
+    {
+      "id": "3",
+      "type": "rds",
+      "position": { "x": 500, "y": 100 },
+      "data": {
+        "label": "Database",
+        "type": "RDS"
+      }
+    }
+  ],
+  "generatedCode": ""
+}
+
