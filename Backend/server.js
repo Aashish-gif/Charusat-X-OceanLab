@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js';
 import projectRoutes from './routes/projects.js';
 import pricingRoutes from './routes/pricing.js';
 import recommendationRoutes from './routes/recommendations.js';
+import voiceRoutes from './routes/voice.js';
 
 // Load environment variables
 dotenv.config();
@@ -43,6 +44,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/pricing', pricingRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/voice', voiceRoutes);
+app.use('/api/v1/voice', voiceRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
