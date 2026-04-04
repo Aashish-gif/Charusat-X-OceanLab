@@ -5,7 +5,6 @@ import FeaturesSection from '@/components/landing/FeaturesSection';
 import HowItWorksSection from '@/components/landing/HowItWorksSection';
 import TechStackSection from '@/components/landing/TechStackSection';
 import FAQSection from '@/components/landing/FAQSection';
-import FooterSection from '@/components/landing/FooterSection';
 
 const Landing: React.FC = () => {
   return (
@@ -18,7 +17,6 @@ const Landing: React.FC = () => {
         <TechStackSection />
         <FAQSection />
       </main>
-      <FooterSection />
     </div>
   );
 };

@@ -23,6 +23,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -47,6 +48,8 @@ const Login: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  const irisColor = showPassword ? '#10b981' : 'hsl(var(--muted-foreground))';
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
@@ -133,11 +136,73 @@ const Login: React.FC = () => {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className="pl-10 bg-glass border-glass-border"
+                  className="pl-10 pr-10 bg-glass border-glass-border"
                   {...register('password')}
                 />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  <motion.svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    initial={false}
+                    animate={{ scale: showPassword ? 1.06 : 1 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  >
+                    <motion.path
+                      d="M2 12C4.3 7.5 8 5 12 5s7.7 2.5 10 7c-2.3 4.5-6 7-10 7s-7.7-2.5-10-7Z"
+                      fill="none"
+                      stroke={irisColor}
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+
+                    <motion.path
+                      d="M2 12C4.3 9.2 8 8 12 8s7.7 1.2 10 4"
+                      fill="none"
+                      stroke={irisColor}
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      animate={{ opacity: showPassword ? 0 : 1, y: showPassword ? -1.5 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                    <motion.path
+                      d="M2 12c2.3 2.8 6 4 10 4s7.7-1.2 10-4"
+                      fill="none"
+                      stroke={irisColor}
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      animate={{ opacity: showPassword ? 0 : 1, y: showPassword ? 1.5 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    />
+
+                    <motion.circle
+                      cx="12"
+                      cy="12"
+                      r="4"
+                      fill="none"
+                      stroke={irisColor}
+                      strokeWidth="1.2"
+                      animate={{ scale: showPassword ? 1 : 0.65, opacity: showPassword ? 1 : 0.6 }}
+                      transition={{ duration: 0.25, ease: 'easeInOut' }}
+                    />
+                    <motion.circle
+                      cx="12"
+                      cy="12"
+                      r="2"
+                      fill={showPassword ? '#10b981' : 'hsl(var(--muted-foreground))'}
+                      animate={{ scale: showPassword ? 1 : 0.4 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </motion.svg>
+                </button>
               </div>
               {errors.password && (
                 <p className="text-sm text-destructive">{errors.password.message}</p>
