@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import BudgetAnalysis from "./pages/BudgetAnalysis";
 import ServiceAdvisor from "./pages/ServiceAdvisor";
+import WelcomeCloud from "./pages/WelcomeCloud";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,8 @@ const App = () => (
           {/* Section: Budget Analysis Route */}
           <Route path="/budget-analysis" element={<BudgetAnalysis />} />
           <Route path="/service-advisor" element={<ServiceAdvisor />} />
+          
+          <Route path="/welcome-cloud" element={<WelcomeCloud />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
