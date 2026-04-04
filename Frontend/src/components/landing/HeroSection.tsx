@@ -155,7 +155,10 @@ const HeroSection: React.FC = () => {
               </Link>
 
               {/* Secondary */}
-              <motion.button
+              <motion.a
+                href="https://drive.google.com/file/d/1hAy1jLsVis7HAkPuOVh5rI5BdAOIGBD2/view"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
@@ -167,7 +170,7 @@ const HeroSection: React.FC = () => {
               >
                 <Play className="w-4 h-4 fill-current" aria-hidden="true" />
                 Watch Demo
-              </motion.button>
+              </motion.a>
             </div>
           </motion.div>
         </div>
