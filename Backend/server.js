@@ -6,12 +6,9 @@ import authRoutes from './routes/auth.js';
 import projectRoutes from './routes/projects.js';
 import pricingRoutes from './routes/pricing.js';
 import recommendationRoutes from './routes/recommendations.js';
-<<<<<<< HEAD
 import voiceRoutes from './routes/voice.js';
-=======
 import { initRAG, getVerifiedContext } from './ragEngine.js';
 import axios from 'axios';
->>>>>>> 50d90f1298722c81eeed9254923e79673982b433
 
 // Load environment variables
 dotenv.config();
