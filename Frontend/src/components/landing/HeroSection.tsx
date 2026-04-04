@@ -1,182 +1,244 @@
 import React from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight, Play, Sparkles, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowRight, Play, Sparkles } from 'lucide-react';
-import { GradientButton } from '@/components/ui/GradientButton';
+import { ContextualAIBar } from '../ui/ContextualAIBar';
+import { DeploymentCard } from '../ui/DeploymentCard';
+import { cn } from '@/lib/utils';
+
+/* ── Shine on gradient text ── */
+const ShineText: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <span className={cn('relative inline-block', className)}>
+    {children}
+    <motion.span
+      className="absolute inset-0 bg-white/15 blur-sm"
+      animate={{ opacity: [0, 0.7, 0] }}
+      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 4 }}
+    />
+  </span>
+);
+
+/* ── Cloud-Drift layer: drifts at a parallax offset relative to scroll ── */
+const CloudDriftLayer: React.FC<{
+  children: React.ReactNode;
+  speed?: number;      // 0 = static, 1 = full scroll
+  className?: string;
+}> = ({ children, speed = 0.15, className }) => {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 1000], [0, -1000 * speed]);
+  return (
+    <motion.div style={{ y }} className={cn('absolute inset-0 pointer-events-none', className)}>
+      {children}
+    </motion.div>
+  );
+};
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Animated Background */}
-      <div className="absolute inset-0 animated-bg" />
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24"
+      aria-labelledby="hero-heading"
+    >
+      {/* ── Layer 0: Deep obsidian base ── */}
+      <div aria-hidden="true" className="absolute inset-0 grid-pattern opacity-15" />
 
-      {/* Floating Gradient Orbs */}
-      <motion.div
-        animate={{
-          y: [0, -30, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-      />
-      <motion.div
-        animate={{
-          y: [0, 30, 0],
-          scale: [1, 1.15, 1],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1
-        }}
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-3xl"
-      />
+      {/* ── Layer 1 (slow drift): large monochrome orb ── */}
+      <CloudDriftLayer speed={0.08}>
+        <motion.div
+          aria-hidden="true"
+          animate={{ y: [0, -32, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl"
+          style={{ background: 'hsl(214 100% 58% / 0.08)' }}
+        />
+      </CloudDriftLayer>
 
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 grid-pattern opacity-30" />
+      {/* ── Layer 2 (medium drift): secondary orb ── */}
+      <CloudDriftLayer speed={0.18}>
+        <motion.div
+          aria-hidden="true"
+          animate={{ y: [0, 28, 0], scale: [1, 1.12, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl"
+          style={{ background: 'hsl(214 100% 58% / 0.08)' }}
+        />
+      </CloudDriftLayer>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* ── Layer 3 (fastest drift): small accent orb ── */}
+      <CloudDriftLayer speed={0.28}>
+        <motion.div
+          aria-hidden="true"
+          animate={{ y: [0, -18, 0], x: [0, 12, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+          className="absolute top-2/3 left-1/3 w-52 h-52 rounded-full blur-3xl"
+          style={{ background: 'hsl(214 100% 58% / 0.06)' }}
+        />
+      </CloudDriftLayer>
+
+      {/* ── Content ── */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
         {/* Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-glass/60 border border-glass-border backdrop-blur-sm"
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full backdrop-blur-sm"
+          style={{
+            background: 'hsl(214 100% 58% / 0.08)',
+            border: '1px solid hsl(214 100% 58% / 0.25)',
+            boxShadow: 'inset 0 1px 0 hsl(214 100% 58% / 0.15)',
+          }}
         >
-          <img src="/logo.png" alt="Logo" className="w-4 h-4 object-contain" />
-          <span className="text-sm text-muted-foreground">
-            Visual Infrastructure Design
+          <Sparkles className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+          <span className="text-xs text-muted-foreground font-medium tracking-wide">
+            Next-Gen Visual Infrastructure Design
           </span>
         </motion.div>
 
-        {/* Main Heading */}
+        {/* H1 */}
         <motion.h1
+          id="hero-heading"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
+          className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight mb-8 leading-[1.06]"
         >
-          Design Cloud Infrastructure
+          Build Cloud Systems
           <br />
-          <span className="gradient-text">Visually</span>
+          <ShineText className="gradient-text">Through Conversation</ShineText>
         </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
-        >
-          Drag AWS resources to design your architecture.
-          Terraform code writes itself. Ship infrastructure faster.
-        </motion.p>
+        {/* Subtitle + AI bar + CTAs */}
+        <div className="max-w-2xl mx-auto mb-16 space-y-8">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.2 }}
+            className="text-lg sm:text-xl text-muted-foreground leading-relaxed"
+          >
+            Describe your stack in plain English. Zenith AI architects your AWS environment
+            visually and generates production-ready Terraform instantly.
+          </motion.p>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <Link to="/login">
-            <GradientButton size="lg" icon={<ArrowRight className="w-5 h-5" />} iconPosition="right">
-              Get Started
-            </GradientButton>
-          </Link>
-          <GradientButton variant="secondary" size="lg" icon={<Play className="w-5 h-5" />}>
-            Watch Demo
-          </GradientButton>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.28 }}
+          >
+            <ContextualAIBar className="mb-6" />
 
-        {/* Hero Visual */}
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              {/* Primary: Liquid-Fill gradient button */}
+              <Link to="/signup" aria-label="Get started with Zenith AI">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  className="relative flex items-center gap-2 px-8 py-3.5 rounded-xl overflow-hidden font-semibold text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  style={{
+                    background: 'linear-gradient(135deg, hsl(214 100% 58%), hsl(214 100% 68%))',
+                    boxShadow: '0 0 32px -6px hsl(214 100% 58% / 0.6)',
+                  }}
+                >
+                  <motion.span
+                    aria-hidden
+                    className="absolute inset-0 pointer-events-none"
+                    style={{ background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%)' }}
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: '160%' }}
+                    transition={{ duration: 0.55, ease: 'easeInOut' }}
+                  />
+                  <span className="relative">Get Started</span>
+                  <ArrowRight className="relative w-4 h-4" aria-hidden="true" />
+                </motion.button>
+              </Link>
+
+              {/* Secondary */}
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                style={{
+                  background: 'hsl(214 100% 58% / 0.07)',
+                  border: '1px solid hsl(214 100% 58% / 0.20)',
+                }}
+              >
+                <Play className="w-4 h-4 fill-current" aria-hidden="true" />
+                Watch Demo
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Hero visual */}
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5 }}
-          className="mt-16 relative"
+          transition={{ duration: 0.9, delay: 0.45, ease: 'easeOut' }}
+          className="relative flex flex-col lg:flex-row items-center justify-center gap-8 min-h-[380px]"
+          aria-label="Visual preview"
         >
-          {/* Glow Effect */}
-          <div className="absolute inset-0 bg-gradient-glow opacity-60" />
-
-          {/* Mock Editor Preview */}
-          <div className="relative glass-panel p-2 mx-auto max-w-4xl">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-glass-border">
-              <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-destructive/80" />
-                <div className="w-3 h-3 rounded-full bg-warning/80" />
-                <div className="w-3 h-3 rounded-full bg-success/80" />
-              </div>
-              <span className="text-xs text-muted-foreground ml-4">zenith-ai-studio</span>
-            </div>
-
-            <div className="grid grid-cols-12 h-80">
-              {/* Sidebar Mock */}
-              <div className="col-span-2 border-r border-glass-border p-3">
-                <div className="space-y-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.8 + i * 0.1 }}
-                      className="h-8 rounded-lg bg-glass-highlight/50"
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Canvas Mock */}
-              <div className="col-span-6 relative grid-pattern p-4">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.2 }}
-                  className="absolute top-8 left-8 w-24 h-16 rounded-xl bg-gradient-primary/20 border border-primary/30 flex items-center justify-center"
-                >
-                  <span className="text-xs text-primary">VPC</span>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.4 }}
-                  className="absolute top-20 right-12 w-24 h-16 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center"
-                >
-                  <span className="text-xs text-accent">Lambda</span>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.6 }}
-                  className="absolute bottom-12 left-1/3 w-24 h-16 rounded-xl bg-success/20 border border-success/30 flex items-center justify-center"
-                >
-                  <span className="text-xs text-success">S3</span>
-                </motion.div>
-              </div>
-
-              {/* Code Mock */}
-              <div className="col-span-4 border-l border-glass-border p-3 font-mono text-xs text-left">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                  className="space-y-1 text-muted-foreground"
-                >
-                  <p><span className="text-primary">resource</span> "aws_vpc" "main" {'{'}</p>
-                  <p className="pl-4">cidr_block = "10.0.0.0/16"</p>
-                  <p>{'}'}</p>
-                  <p className="mt-2"><span className="text-accent">resource</span> "aws_lambda" {'{'}</p>
-                  <p className="pl-4">function_name = "api"</p>
-                  <p>{'}'}</p>
-                </motion.div>
-              </div>
-            </div>
+          <div className="relative z-20 group">
+            <div
+              aria-hidden="true"
+              className="absolute -inset-6 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-500 blur-3xl"
+              style={{ background: 'hsl(214 100% 58% / 0.12)' }}
+            />
+            <DeploymentCard status="running" progress={78} projectName="Zenith Production" />
           </div>
+
+          <div className="flex flex-col gap-4 lg:mt-10" aria-label="Live infrastructure stats">
+            {/* Cost tile */}
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+              className="glass-panel p-4 flex flex-col gap-3 w-52"
+              aria-label="Live cost estimation: $142.50 per month"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-primary font-bold tracking-widest uppercase">Live Costing</span>
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" aria-hidden="true" />
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold text-foreground" aria-live="polite">$142.50</span>
+                <span className="text-[10px] text-muted-foreground">/mo</span>
+              </div>
+              <div className="h-1 rounded-full overflow-hidden" style={{ background: 'hsl(214 100% 58% / 0.10)' }}>
+                <div className="h-full w-3/4" style={{ background: 'hsl(214 100% 58%)' }} />
+              </div>
+            </motion.div>
+
+            {/* Quick action tile */}
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
+              className="glass-panel p-4 flex items-center gap-3 w-52 cursor-pointer group"
+              role="button"
+              tabIndex={0}
+              aria-label="Quick action: Sync Terraform"
+            >
+              <motion.div
+                whileHover={{ scale: 1.15, rotate: 12 }}
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: 'hsl(214 100% 58% / 0.15)' }}
+                aria-hidden="true"
+              >
+                <Zap className="w-5 h-5 text-primary" />
+              </motion.div>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold text-foreground uppercase tracking-widest">Quick Action</span>
+                <span className="text-[9px] text-muted-foreground uppercase">Sync Terraform</span>
+              </div>
+            </motion.div>
+          </div>
+
+          <div
+            aria-hidden="true"
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-px"
+            style={{ background: 'linear-gradient(90deg, transparent, hsl(214 100% 58% / 0.15), transparent)' }}
+          />
         </motion.div>
       </div>
     </section>
