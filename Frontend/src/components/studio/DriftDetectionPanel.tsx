@@ -145,7 +145,7 @@ const DriftDetectionPanel: React.FC<DriftDetectionPanelProps> = ({ projectId, cl
           </div>
           <Badge 
             variant={driftStatus === 'drift-found' ? 'destructive' : driftStatus === 'no-drift' ? 'success' : 'secondary'}
-            className="text-[10px] px-1.5 py-0 h-5"
+            className="text-[10px] px-2 py-0.5 h-auto leading-none whitespace-nowrap shrink-0"
           >
             <span className="capitalize">{getStatusText()}</span>
           </Badge>

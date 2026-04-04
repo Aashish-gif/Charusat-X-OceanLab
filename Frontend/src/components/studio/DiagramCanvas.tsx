@@ -28,6 +28,10 @@ const nodeTypes = {
   cloudComponent: CloudComponentNode,
 };
 
+const edgeTypes = {
+  default: CustomEdge,
+};
+
 let id = 0;
 const getId = () => `node_${id++}`;
 
@@ -346,9 +350,7 @@ const DiagramCanvas: React.FC = () => {
           animated: true,
           style: { stroke: 'hsl(190, 95%, 55%)', strokeWidth: 2 },
         }}
-        edgeTypes={{
-          default: CustomEdge,
-        }}
+        edgeTypes={edgeTypes}
         className="bg-background"
       >
         <Background

@@ -64,7 +64,7 @@ const ToolsPanel: React.FC<ToolsPanelProps> = ({ projectId, showChat }) => {
             
               {showChatFinal ? (
                 /* Middle section - Chat Composer */
-                <div className="flex-1 flex flex-col border-t border-sidebar-border bg-sidebar/50 backdrop-blur-sm">
+                <div className="flex-1 flex flex-col min-h-0 border-t border-sidebar-border bg-sidebar/50 backdrop-blur-sm">
                   <ChatComposer />
                 </div>
               ) : (
