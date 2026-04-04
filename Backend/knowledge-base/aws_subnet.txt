@@ -1,0 +1,30 @@
+aws_subnet
+
+## Example Usage
+
+resource "aws_subnet" "main" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  tags = {
+    Name = "Main"
+  }
+}
+
+resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "172.20.0.0/16"
+}
+
+resource "aws_subnet" "in_secondary_cidr" {
+  vpc_id     = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  cidr_block = "172.20.0.0/24"
+}
+
+## Argument Reference
+
+- vpc_id (Required): The VPC ID.
+- cidr_block (Optional): The CIDR block for the subnet.
+- availability_zone (Optional): The Availability Zone for the subnet.
+- assign_ipv6_address_on_creation (Optional): Whether to assign IPv6 addresses (default: false).
+- tags (Optional): Tags to assign to the resource.
+- region (Optional): Region where the resource will be managed.

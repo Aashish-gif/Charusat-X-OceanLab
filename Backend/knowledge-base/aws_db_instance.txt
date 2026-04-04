@@ -1,0 +1,37 @@
+ aws_db_instance
+
+## Example Usage
+
+resource "aws_db_instance" "default" {
+  allocated_storage    = 10
+  db_name              = "mydb"
+  engine               = "mysql"
+  engine_version       = "8.0"
+  instance_class       = "db.t3.micro"
+  username             = "foo"
+  password             = "foobarbaz"
+  parameter_group_name = "default.mysql8.0"
+  skip_final_snapshot  = true
+}
+
+resource "aws_db_instance" "example_autoscaling" {
+  allocated_storage     = 50
+  max_allocated_storage = 100
+}
+
+## Argument Reference
+
+- allocated_storage (Required, number): The amount of storage in gibibytes (GiB) to allocate for the DB instance.
+- max_allocated_storage (Optional, number): The upper limit to which Amazon RDS can automatically scale storage for the DB instance. Must be greater than allocated_storage to enable storage autoscaling.
+- db_name (Optional, string): The name of the initial database to create in the DB instance. Some engines may ignore this.
+- engine (Required, string): The database engine to use for the instance, such as "mysql", "postgres", "mariadb", "oracle-se2", or "sqlserver-ee".
+- engine_version (Optional, string): The version of the database engine to use.
+- instance_class (Required, string): The compute and memory capacity of the DB instance, for example "db.t3.micro".
+- username (Required, string): The name of the master database user.
+- password (Required unless password_wo is used, string): The password for the master database user.
+- password_wo (Optional, string): A write-only password argument available in newer Terraform versions to avoid storing the password directly in configuration.
+- parameter_group_name (Optional, string): The name of the DB parameter group to associate with the instance.
+- skip_final_snapshot (Optional, bool): Whether to skip creating a final DB snapshot when the instance is deleted. When false, a final snapshot identifier is usually required.
+- apply_immediately (Optional, bool): When true, applies modifications immediately instead of during the next maintenance window. Can cause brief downtime.
+- allow_major_version_upgrade (Optional, bool): Whether to allow major engine version upgrades when modifying the engine_version.
+- vpc_security_group_ids (Optional, list(string)): A list of VPC security group IDs to associate with the DB instance.

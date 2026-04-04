@@ -1,0 +1,34 @@
+aws_nat_gateway
+
+## Example Usage
+
+resource "aws_nat_gateway" "example" {
+  allocation_id = aws_eip.example.id
+  subnet_id     = aws_subnet.example.id
+  tags = {
+    Name = "gw NAT"
+  }
+  depends_on = [aws_internet_gateway.example]
+}
+
+resource "aws_nat_gateway" "example" {
+  connectivity_type = "private"
+  subnet_id         = aws_subnet.example.id
+}
+
+resource "aws_nat_gateway" "example" {
+  vpc_id            = aws_vpc.example.id
+  availability_mode = "regional"
+}
+
+## Argument Reference
+
+- vpc_id (Optional): (Regional NAT gateways only) VPC ID where the NAT Gateway will be created.
+- subnet_id (Optional): (Zonal NAT gateways only) The Subnet ID.
+- allocation_id (Optional): (Zonal NAT gateways only) The Allocation ID of the Elastic IP address. Required when `connectivity_type` is `public`.
+- connectivity_type (Optional): Connectivity type (`private` or `public`). Defaults to `public`.
+- availability_mode (Optional): Specifies `zonal` or `regional`. Defaults to `zonal`.
+- secondary_allocation_ids (Optional): (Zonal NAT gateways only) List of secondary allocation EIP IDs.
+- secondary_private_ip_addresses (Optional): (Zonal NAT gateways only) List of secondary private IPv4 addresses.
+- secondary_private_ip_address_count (Optional): (Zonal NAT gateways only) Number of secondary private IPv4 addresses to assign.
+- tags (Optional): A map of tags to assign to the resource.

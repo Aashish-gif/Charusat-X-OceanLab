@@ -1,0 +1,33 @@
+aws_vpc
+
+## Example Usage
+
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_vpc" "main" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "main"
+  }
+}
+
+resource "aws_vpc" "test" {
+  ipv4_ipam_pool_id   = aws_vpc_ipam_pool.test.id
+  ipv4_netmask_length = 28
+}
+
+## Argument Reference
+
+- cidr_block (Optional, string): The IPv4 CIDR block for the VPC. Can be explicitly set or derived from IPAM.
+- instance_tenancy (Optional, string): Tenancy option for instances in the VPC. Valid values are "default" or "dedicated".
+- enable_dns_support (Optional, bool): Whether DNS resolution is supported for the VPC. Defaults to true.
+- enable_dns_hostnames (Optional, bool): Whether DNS hostnames are supported for instances in the VPC. Defaults to false.
+- enable_network_address_usage_metrics (Optional, bool): Whether Network Address Usage metrics are enabled for the VPC. Defaults to false.
+- ipv4_ipam_pool_id (Optional, string): The ID of an IPv4 IPAM pool to use for automatic CIDR allocation for the VPC.
+- ipv4_netmask_length (Optional, number): The netmask length to request from the IPv4 IPAM pool. Conflicts with cidr_block and requires ipv4_ipam_pool_id.
+- ipv6_cidr_block (Optional, string): The IPv6 CIDR block to assign to the VPC.
+- assign_generated_ipv6_cidr_block (Optional, bool): Whether to request an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC.

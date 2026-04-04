@@ -1,0 +1,41 @@
+aws_cloudwatch_event_rule
+
+## Example Usage
+
+resource "aws_cloudwatch_event_rule" "console" {
+  name        = "capture-aws-sign-in"
+  description = "Capture each AWS Console Sign In"
+
+  event_pattern = jsonencode({
+    detail-type = [
+      "AWS Console Sign In via CloudTrail"
+    ]
+  })
+}
+
+resource "aws_cloudwatch_event_target" "sns" {
+  rule      = aws_cloudwatch_event_rule.console.name
+  target_id = "SendToSNS"
+  arn       = aws_sns_topic.aws_logins.arn
+}
+
+resource "aws_cloudwatch_event_rule" "every_five_minutes" {
+  name                = "every-five-minutes"
+  description         = "Triggers cleanup Lambda every 5 minutes"
+  schedule_expression = "rate(5 minutes)"
+}
+
+## Argument Reference
+
+- name (Optional): The name of the rule (Terraform assigns a random name if omitted). Conflicts with `name_prefix`.
+- name_prefix (Optional): Creates a unique name beginning with the specified prefix. Conflicts with `name`.
+- description (Optional): The description of the rule.
+- schedule_expression (Optional): The scheduling expression (for example, `cron(...)` or `rate(5 minutes)`). Can only be used on the default event bus.
+- event_pattern (Optional): The event pattern as a JSON object. At least one of `schedule_expression` or `event_pattern` is required.
+- event_bus_name (Optional): The name or ARN of the event bus to associate with this rule (defaults to `default`).
+- role_arn (Optional): ARN for the role used to invoke targets.
+- state (Optional): State of the rule (`DISABLED`, `ENABLED`, `ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS`). Defaults to `ENABLED`.
+- is_enabled (Optional, Deprecated): Whether the rule should be enabled (use `state` instead).
+- force_destroy (Optional): Used to delete managed rules created by AWS. Defaults to `false`.
+- region (Optional): Region where the resource will be managed.
+- tags (Optional): Map of tags to assign to the resource.

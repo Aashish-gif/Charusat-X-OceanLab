@@ -1,0 +1,86 @@
+aws_lb
+
+## Example Usage
+
+resource "aws_lb" "test" {
+  name               = "test-lb-tf"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb_sg.id]
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
+
+  enable_deletion_protection = true
+
+  access_logs {
+    bucket  = aws_s3_bucket.lb_logs.id
+    prefix  = "test-lb"
+    enabled = true
+  }
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+resource "aws_lb" "test" {
+  name               = "test-lb-tf"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
+
+  enable_deletion_protection = true
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+resource "aws_lb" "example" {
+  name               = "example"
+  load_balancer_type = "network"
+
+  subnet_mapping {
+    subnet_id     = aws_subnet.example1.id
+    allocation_id = aws_eip.example1.id
+  }
+
+  subnet_mapping {
+    subnet_id     = aws_subnet.example2.id
+    allocation_id = aws_eip.example2.id
+  }
+}
+
+resource "aws_lb" "example" {
+  name               = "example"
+  load_balancer_type = "network"
+
+  subnet_mapping {
+    subnet_id            = aws_subnet.example1.id
+    private_ipv4_address = "10.0.1.15"
+  }
+
+  subnet_mapping {
+    subnet_id            = aws_subnet.example2.id
+    private_ipv4_address = "10.0.2.15"
+  }
+}
+
+## Argument Reference
+
+- name (Optional): The name of the load balancer.
+- name_prefix (Optional): Creates a unique name beginning with the specified prefix; conflicts with `name`.
+- load_balancer_type: Type of load balancer (`application`, `network`, or `gateway`).
+- internal: Whether the load balancer is internal or internet-facing.
+- subnets (Optional): List of subnet IDs to attach to the LB.
+- subnet_mapping (Optional): Subnet mapping block for advanced configuration.
+- security_groups (Optional): List of security group IDs to assign to the LB.
+- access_logs (Optional): Access Logs block for logging.
+- connection_logs (Optional): Connection Logs block (application load balancers only).
+- preserve_host_header (Optional): Whether to preserve the Host header in HTTP requests.
+- xff_header_processing_mode (Optional): How to modify the X-Forwarded-For header (`append`, `preserve`, or `remove`).
+- drop_invalid_header_fields (Optional): Whether to remove invalid HTTP headers.
+- enable_cross_zone_load_balancing (Optional): Enable/disable cross-zone load balancing.
+- enable_deletion_protection (Optional): Enable deletion protection.
+- desync_mitigation_mode (Optional): HTTP desync mitigation (`monitor`, `defensive`, `strictest`).
+- tags (Optional): Map of tags to assign to the resource.
+- Note: Either `subnets` or `subnet_mapping` is required.

@@ -1,0 +1,47 @@
+aws_api_gateway_rest_api
+
+## Example Usage
+
+resource "aws_api_gateway_rest_api" "example" {
+  body = jsonencode({
+    openapi = "3.0.1"
+    info = {
+      title   = "example"
+      version = "1.0"
+    }
+    paths = {
+      "/path1" = {
+        get = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "GET"
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+          }
+        }
+      }
+    }
+  })
+
+  name = "example"
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+## Argument Reference
+
+- name (Required): The name of the REST API.
+- description (Optional): The description of the REST API.
+- body (Optional): An OpenAPI specification that defines routes and integrations.
+- api_key_source (Optional): Source of API key for requests (HEADER or AUTHORIZER).
+- policy (Optional): JSON formatted policy document controlling API access.
+- endpoint_configuration (Optional): Endpoint configuration block.
+- minimum_compression_size (Optional): Minimum response size to compress (-1 to 10485760). -1 disables compression.
+- binary_media_types (Optional): List of binary media types supported.
+- tags (Optional): Key-value map of resource tags.
+
+Endpoint configuration block:
+- types (Required): List of endpoint types (EDGE, REGIONAL, or PRIVATE).
+- vpc_endpoint_ids (Optional): List of VPC Endpoint IDs (for PRIVATE endpoints only).

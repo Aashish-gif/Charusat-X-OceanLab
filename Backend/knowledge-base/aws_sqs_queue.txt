@@ -1,0 +1,35 @@
+aws_sqs_queue
+
+## Example Usage
+
+resource "aws_sqs_queue" "terraform_queue" {
+  name                      = "terraform-example-queue"
+  delay_seconds             = 90
+  max_message_size          = 2048
+  message_retention_seconds = 86400
+  receive_wait_time_seconds = 10
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.terraform_queue_deadletter.arn
+    maxReceiveCount     = 4
+  })
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+## Argument Reference
+
+- name (Optional): Queue name.
+- delay_seconds (Optional): Delay for message delivery.
+- max_message_size (Optional): Maximum message size in bytes.
+- message_retention_seconds (Optional): How long messages are retained.
+- receive_wait_time_seconds (Optional): Long polling wait time.
+- visibility_timeout_seconds (Optional): Visibility timeout (0-43200 seconds, default 30).
+- fifo_queue (Optional): Enable FIFO queue type.
+- content_based_deduplication (Optional): Enable deduplication for FIFO queues.
+- kms_master_key_id (Optional): KMS key for encryption.
+- sqs_managed_sse_enabled (Optional): Enable SQS-managed encryption.
+- redrive_policy (Optional): Dead-letter queue configuration.
+- tags (Optional): Tags to assign to the queue.
+- region (Optional): AWS region for the resource.

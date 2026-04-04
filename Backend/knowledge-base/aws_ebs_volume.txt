@@ -1,0 +1,29 @@
+aws_ebs_volume
+
+## Example Usage
+
+resource "aws_ebs_volume" "example" {
+  availability_zone = "us-west-2a"
+  size              = 40
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
+## Argument Reference
+
+- availability_zone (Required): Availability zone where the EBS volume will exist.
+- size (Optional): Size of the drive in GiBs.
+- type (Optional): Type of EBS volume (`standard`, `gp2`, `gp3`, `io1`, `io2`, `sc1`, or `st1`). Default: `gp2`.
+- encrypted (Optional): If true, the disk will be encrypted.
+- iops (Optional): Amount of IOPS to provision (only valid for `io1`, `io2`, or `gp3`).
+- throughput (Optional): Throughput in MiB/s (only valid for `gp3`).
+- kms_key_id (Optional): ARN for the KMS encryption key.
+- snapshot_id (Optional): A snapshot to base the EBS volume off of.
+- tags (Optional): A map of tags to assign to the resource.
+- multi_attach_enabled (Optional): Enable Amazon EBS Multi-Attach (supported on `io1` and `io2`).
+- outpost_arn (Optional): Amazon Resource Name of the Outpost.
+- final_snapshot (Optional): Create snapshot before volume deletion (default: false).
+- volume_initialization_rate (Optional): EBS provisioned rate for volume initialization in MiB/s (requires `snapshot_id`).
+- region (Optional): Region where the resource will be managed.

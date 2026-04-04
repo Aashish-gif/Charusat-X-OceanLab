@@ -1,0 +1,34 @@
+aws_vpc_endpoint
+
+## Example Usage
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id       = aws_vpc.main.id
+  service_name = "com.amazonaws.us-west-2.s3"
+}
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id       = aws_vpc.main.id
+  service_name = "com.amazonaws.us-west-2.s3"
+  tags = {
+    Environment = "test"
+  }
+}
+
+resource "aws_vpc_endpoint" "ec2" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.us-west-2.ec2"
+  vpc_endpoint_type = "Interface"
+  security_group_ids = [aws_security_group.sg1.id]
+  private_dns_enabled = true
+}
+
+## Argument Reference
+
+- vpc_id (Required): The ID of the VPC in which the endpoint will be used.
+- service_name (Optional): The name of the service.
+- vpc_endpoint_type (Optional): The VPC endpoint type: `Gateway`, `GatewayLoadBalancer`, or `Interface`. Defaults to `Gateway`.
+- security_group_ids (Optional): Security groups for Interface endpoints.
+- subnet_ids (Optional): Subnets for Interface, Gateway Load Balancer, and other endpoint types.
+- private_dns_enabled (Optional): Enables private DNS for Interface endpoints.
+- tags (Optional): Tags to assign to the resource.

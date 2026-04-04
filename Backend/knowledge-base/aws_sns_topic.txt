@@ -1,0 +1,20 @@
+aws_sns_topic
+
+## Example Usage
+
+resource "aws_sns_topic" "user_updates" {
+  name = "user-updates-topic"
+}
+
+## Argument Reference
+
+- region (Optional): AWS region for the resource.
+- name (Optional): Topic name.
+- name_prefix (Optional): Creates unique name with prefix.
+- display_name (Optional): Display name for the topic.
+- policy (Optional): IAM policy as JSON.
+- delivery_policy (Optional): SNS delivery policy JSON.
+- kms_master_key_id (Optional): AWS-managed or custom CMK for encryption.
+- application_success_feedback_role_arn / http_success_feedback_role_arn (Optional): IAM role for success feedback.
+- application_success_feedback_sample_rate / http_success_feedback_sample_rate (Optional): Sample rate percentage (0-100).
+- application_failure_feedback_role_arn / http_failure_feedback_role_arn (Optional): IAM role for failure feedback.

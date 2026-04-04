@@ -1,0 +1,61 @@
+aws_eks_cluster
+
+## Example Usage
+
+resource "aws_eks_cluster" "example" {
+  name = "example"
+
+  access_config {
+    authentication_mode = "API"
+  }
+
+  role_arn = aws_iam_role.cluster.arn
+  version  = "1.31"
+
+  vpc_config {
+    subnet_ids = [
+      aws_subnet.az1.id,
+      aws_subnet.az2.id,
+      aws_subnet.az3.id,
+    ]
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy,
+  ]
+}
+
+resource "aws_iam_role" "cluster" {
+  name = "eks-cluster-example"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = ["sts:AssumeRole", "sts:TagSession"]
+      Effect = "Allow"
+      Principal = {
+        Service = "eks.amazonaws.com"
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = aws_iam_role.cluster.name
+}
+
+## Argument Reference
+
+- name (Required): Name of the cluster.
+- role_arn (Required): ARN of the IAM role for the cluster.
+- vpc_config (Required): VPC configuration block containing subnet IDs.
+- version (Optional): Kubernetes version (for example, `1.31`).
+- enabled_cluster_log_types (Optional): List of control plane log types to enable (for example, `["api", "audit"]`).
+- access_config (Optional): Configuration block for access settings, including `authentication_mode`.
+- bootstrap_self_managed_addons (Optional): Whether to bootstrap self-managed addons (required to be `false` for EKS Auto Mode).
+- compute_config (Optional): Configuration for EKS Auto Mode compute capability.
+- kubernetes_network_config (Optional): Kubernetes network configuration.
+- storage_config (Optional): Storage configuration for EKS Auto Mode.
+- vpc_config.subnet_ids: List of subnet IDs.
+- vpc_config.endpoint_private_access: Enable private access to the cluster endpoint.
+- vpc_config.endpoint_public_access: Enable public access to the cluster endpoint.

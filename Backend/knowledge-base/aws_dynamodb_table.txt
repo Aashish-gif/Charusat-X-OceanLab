@@ -1,0 +1,59 @@
+aws_dynamodb_table
+
+## Example Usage
+
+resource "aws_dynamodb_table" "basic-dynamodb-table" {
+  name           = "GameScores"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 20
+  write_capacity = 20
+  hash_key       = "UserId"
+  range_key      = "GameTitle"
+
+  attribute {
+    name = "UserId"
+    type = "S"
+  }
+
+  attribute {
+    name = "GameTitle"
+    type = "S"
+  }
+
+  attribute {
+    name = "TopScore"
+    type = "N"
+  }
+
+  ttl {
+    attribute_name = "TimeToExist"
+    enabled        = true
+  }
+
+  global_secondary_index {
+    name               = "GameTitleIndex"
+    hash_key           = "GameTitle"
+    range_key          = "TopScore"
+    write_capacity     = 10
+    read_capacity      = 10
+    projection_type    = "INCLUDE"
+    non_key_attributes = ["UserId"]
+  }
+
+  tags = {
+    Name        = "dynamodb-table-1"
+    Environment = "production"
+  }
+}
+
+## Argument Reference
+
+- name: Table name.
+- billing_mode: Billing mode (for example, `PROVISIONED` or `PAY_PER_REQUEST`).
+- read_capacity / write_capacity: Provisioned read/write capacity units (used with `PROVISIONED` billing mode).
+- hash_key: Table hash (partition) key attribute name.
+- range_key: Table range (sort) key attribute name (optional depending on schema).
+- attribute: Attribute definitions (name + type) used for keys/indexes.
+- ttl: Time-to-live configuration (for example, `attribute_name` + `enabled`).
+- global_secondary_index: GSI configuration (name, hash_key, optional range_key, capacities, projection, and non-key attributes).
+- tags: Resource tags.
