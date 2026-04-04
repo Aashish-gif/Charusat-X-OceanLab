@@ -1,0 +1,22 @@
+aws_security_group
+
+## Example Usage
+
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic and all outbound traffic"
+  vpc_id      = aws_vpc.main.id
+
+  tags = {
+    Name = "allow_tls"
+  }
+}
+
+## Argument Reference
+
+- vpc_id (Optional, Forces new resource): The VPC ID.
+- name (Optional): The name of the security group.
+- description (Optional, Forces new resource): The security group description.
+- tags (Optional): A map of tags to assign to the resource.
+- ingress (Optional): Ingress rules specified inline (can be specified multiple times).
+- egress (Optional): Egress rules specified inline (can be specified multiple times).

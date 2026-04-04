@@ -1,0 +1,17 @@
+aws_internet_gateway
+
+## Example Usage
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "main"
+  }
+}
+
+## Argument Reference
+
+- vpc_id (Optional): The VPC ID to create in. Alternatively, you can use `aws_internet_gateway_attachment` to attach an Internet Gateway to a VPC separately.
+- tags (Optional): A map of tags to assign to the resource. Tags with matching keys will overwrite those defined at the provider-level if `default_tags` is configured.
+- region (Optional): Region where this resource will be managed. Defaults to the Region set in the provider configuration.

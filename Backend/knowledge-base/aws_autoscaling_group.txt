@@ -1,0 +1,97 @@
+aws_autoscaling_group
+
+## Example Usage
+
+resource "aws_placement_group" "test" {
+  name     = "test"
+  strategy = "cluster"
+}
+
+resource "aws_autoscaling_group" "bar" {
+  name                      = "foobar3-terraform-test"
+  max_size                  = 5
+  min_size                  = 2
+  health_check_grace_period = 300
+  health_check_type         = "ELB"
+  desired_capacity          = 4
+  force_delete              = true
+  placement_group           = aws_placement_group.test.id
+  launch_configuration      = aws_launch_configuration.foobar.name
+  vpc_zone_identifier       = [aws_subnet.example1.id, aws_subnet.example2.id]
+
+  instance_maintenance_policy {
+    min_healthy_percentage = 90
+    max_healthy_percentage = 120
+  }
+
+  tag {
+    key                 = "foo"
+    value               = "bar"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_launch_template" "foobar" {
+  name_prefix   = "foobar"
+  image_id      = "ami-1a2b3c"
+  instance_type = "t2.micro"
+}
+
+resource "aws_autoscaling_group" "bar" {
+  availability_zones = ["us-east-1a"]
+  desired_capacity   = 1
+  max_size           = 1
+  min_size           = 1
+
+  launch_template {
+    id      = aws_launch_template.foobar.id
+    version = "$Latest"
+  }
+}
+
+resource "aws_autoscaling_group" "example" {
+  availability_zones = ["us-east-1a"]
+  desired_capacity   = 1
+  max_size           = 1
+  min_size           = 1
+
+  mixed_instances_policy {
+    launch_template {
+      launch_template_specification {
+        launch_template_id = aws_launch_template.example.id
+      }
+
+      override {
+        instance_type     = "c4.large"
+        weighted_capacity = "3"
+      }
+
+      override {
+        instance_type     = "c3.large"
+        weighted_capacity = "2"
+      }
+    }
+  }
+}
+
+## Argument Reference
+
+- launch_configuration (Required): Launch configuration to use (must specify exactly one of: `launch_configuration`, `launch_template`, `mixed_instances_policy`).
+- launch_template (Required): Launch template to use (must specify exactly one of: `launch_configuration`, `launch_template`, `mixed_instances_policy`).
+- mixed_instances_policy (Required): Mixed instances policy (must specify exactly one of: `launch_configuration`, `launch_template`, `mixed_instances_policy`).
+- name: Name of the Auto Scaling Group.
+- max_size: Maximum number of instances.
+- min_size: Minimum number of instances.
+- desired_capacity: Desired number of instances.
+- availability_zones: List of availability zones.
+- health_check_grace_period: Time before health checks begin.
+- health_check_type: Type of health check (for example, `ELB`).
+- vpc_zone_identifier: List of VPC subnets.
+- placement_group: Placement group for instances.
+- force_delete: Force deletion of instances on destroy.
+- launch_template: (Optional nested block) Configuration for launch template with `id` and `version`.
+- mixed_instances_policy: (Optional nested block) Policy for mixed instance types.
+- instance_maintenance_policy: (Optional nested block) Policy with `min_healthy_percentage` and `max_healthy_percentage`.
+- initial_lifecycle_hook: (Optional nested block) Lifecycle hook configuration.
+- tag: (Optional nested block) Tags to apply to instances with `key`, `value`, and `propagate_at_launch`.
+- timeouts: (Optional nested block) Custom timeout values (for example `delete`).

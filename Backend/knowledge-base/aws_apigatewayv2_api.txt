@@ -1,0 +1,32 @@
+aws_apigatewayv2_api
+
+## Example Usage
+
+resource "aws_apigatewayv2_api" "example" {
+  name                       = "example-websocket-api"
+  protocol_type              = "WEBSOCKET"
+  route_selection_expression = "$request.body.action"
+}
+
+resource "aws_apigatewayv2_api" "example" {
+  name          = "example-http-api"
+  protocol_type = "HTTP"
+}
+
+## Argument Reference
+
+- name (Required): Name of the API (<= 128 characters).
+- protocol_type (Required): API protocol: `HTTP` or `WEBSOCKET`.
+- description (Optional): API description (<= 1024 characters).
+- api_key_selection_expression (Optional): API key selection expression (WebSocket only).
+- route_selection_expression (Optional): Route selection expression.
+- cors_configuration (Optional): CORS configuration (HTTP only).
+- disable_execute_api_endpoint (Optional): Whether to disable the default execute-api endpoint.
+- ip_address_type (Optional): IP address types: `ipv4` or `dualstack`.
+- credentials_arn (Optional): Credentials for quick create integration (HTTP only).
+- route_key (Optional): Route key for quick create (HTTP only).
+- target (Optional): Target for quick create (HTTP only).
+- tags (Optional): Resource tags.
+- body (Optional): OpenAPI specification (HTTP only).
+- version (Optional): Version identifier (1-64 characters).
+- fail_on_warnings (Optional): Whether warnings return errors during creation/update (HTTP only).

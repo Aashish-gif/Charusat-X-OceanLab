@@ -1,0 +1,30 @@
+aws_s3_bucket
+
+## Example Usage
+
+resource "aws_s3_bucket" "example" {
+  bucket = "my-tf-test-bucket"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
+
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
+resource "aws_s3_bucket" "example_account_regional" {
+  bucket           = format("my-tf-test-bucket-%s-%s-an", data.aws_caller_identity.current.account_id, data.aws_region.current.name)
+  bucket_namespace = "account-regional"
+}
+
+## Argument Reference
+
+- bucket (Optional, string, Forces new resource): The name of the bucket. If omitted, Terraform will assign a random, unique name. Bucket names must be lowercase and 63 characters or fewer and must follow AWS S3 bucket naming rules.
+- bucket_prefix (Optional, string, Forces new resource): Creates a unique bucket name beginning with the specified prefix. Conflicts with bucket.
+- bucket_namespace (Optional, string): The bucket namespace when using alternative naming modes such as "account-regional".
+- region (Optional, string): The AWS region where the S3 bucket will be created and managed. Defaults to the region specified in the provider configuration.
+- force_destroy (Optional, bool): When true, all objects (including any versioned objects) will be deleted from the bucket when the bucket is destroyed.
+- object_lock_enabled (Optional, bool, Forces new resource): Indicates whether Object Lock is enabled for the bucket. Must be enabled at bucket creation time.
+- tags (Optional, map(string)): A mapping of tags to assign to the bucket.

@@ -1,0 +1,34 @@
+aws_cloudwatch_event_bus
+
+## Example Usage
+
+resource "aws_cloudwatch_event_bus" "messenger" {
+  name = "chat-messages"
+}
+
+data "aws_cloudwatch_event_source" "examplepartner" {
+  name_prefix = "aws.partner/examplepartner.com"
+}
+
+resource "aws_cloudwatch_event_bus" "examplepartner" {
+  name              = data.aws_cloudwatch_event_source.examplepartner.name
+  description       = "Event bus for example partner events"
+  event_source_name = data.aws_cloudwatch_event_source.examplepartner.name
+}
+
+resource "aws_cloudwatch_event_bus" "example" {
+  name = "example-event-bus"
+  log_config {
+    include_detail = "FULL"
+    level          = "TRACE"
+  }
+}
+
+## Argument Reference
+
+- name (Required): Name of the event bus.
+- region (Optional): Region where this resource will be managed.
+- description (Optional): Event bus description.
+- event_source_name (Optional): For partner event buses, specifies the partner event source to match.
+- log_config (Optional): Block for logging configuration (with `level` and `include_detail` options).
+- kms_key_identifier (Optional): KMS customer managed key identifier for encryption.

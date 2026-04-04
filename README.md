@@ -11,15 +11,6 @@ Zenith AI is a state-of-the-art cloud infrastructure automation platform. Build,
 
 ---
 
-## 🔗 Quick Links
-
-| Resource | Link |
-| :--- | :--- |
-| **🚀 Web Application** | [Launch App](https://innovaition-x-daiict-hackaton.netlify.app/) *(Confirming URL...)* |
-| **📺 Demo Video** | [Watch on YouTube](https://www.youtube.com/watch?v=INSERT_ID_HERE) |
-| **📄 API Documentation** | [Postman Collection](https://documenter.getpostman.com/view/INSERT_ID_HERE) |
-
----
 
 ## 🎨 Application Blueprints (Real Wireframes)
 
@@ -143,7 +134,6 @@ npm start
 
 ## 📞 Support & Community
 
-*Developed for the Zenith AI-X DAIICT Hackathon.*
 
 - **Support**: Reach out via GitHub Issues.
 - **Contributions**: Pull requests are welcome!

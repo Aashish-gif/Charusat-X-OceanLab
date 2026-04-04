@@ -1,0 +1,53 @@
+aws_instance
+
+## Example Usage
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"]
+}
+
+resource "aws_instance" "example" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
+## Argument Reference
+
+- ami (Required, string): The ID of the AMI to use for the instance.
+- instance_type (Required, string): The type of instance to start, such as "t3.micro".
+- availability_zone (Optional, string): The Availability Zone to start the instance in. If not set, the provider will choose one.
+- placement_group (Optional, string): The name of the Placement Group to start the instance in.
+- tenancy (Optional, string): The tenancy option for the instance. Valid values typically include "default", "dedicated", or "host".
+- host_id (Optional, string): The ID of the dedicated host for the instance, if using host tenancy.
+- cpu_core_count (Optional, number): The number of CPU cores for the instance. Must be used with cpu_threads_per_core.
+- cpu_threads_per_core (Optional, number): The number of threads per core. Valid values are often 1 or 2; defaults to 2 when not set.
+- ebs_optimized (Optional, bool): Whether the instance is launched as EBS-optimized. Some instance types are EBS-optimized by default.
+- disable_api_termination (Optional, bool): If true, enables EC2 Instance Termination Protection to prevent the instance from being terminated via the API.
+- instance_initiated_shutdown_behavior (Optional, string): The behavior of the instance when an OS-level shutdown is requested. Common values are "stop" or "terminate".
+- key_name (Optional, string): The name of the key pair to use for SSH access to the instance.
+- monitoring (Optional, bool): If true, enables detailed CloudWatch monitoring for the instance.
+- vpc_security_group_ids (Optional, list(string)): A list of security group IDs to associate with the instance when launched in a VPC.
+- security_groups (Optional, list(string)): A list of security group names to associate with the instance (for EC2-Classic or default VPC).
+- subnet_id (Optional, string): The VPC subnet ID to launch the instance in.
+- associate_public_ip_address (Optional, bool): Whether to associate a public IP address with the instance in a VPC.
+- private_ip (Optional, string): The private IP address to assign to the instance.
+- ebs_block_device (Optional, block): One or more nested blocks defining additional EBS block devices to attach to the instance.
+- ephemeral_block_device (Optional, block): One or more nested blocks defining instance store (ephemeral) volumes to attach.
+- root_block_device (Optional, block): A nested block defining the root block device configuration of the instance.
+- credit_specification (Optional, block): A nested block that controls CPU credit options for burstable instance types.

@@ -1,0 +1,37 @@
+aws_efs_file_system
+
+## Example Usage
+
+resource "aws_efs_file_system" "foo" {
+  creation_token = "my-product"
+
+  tags = {
+    Name = "MyProduct"
+  }
+}
+
+resource "aws_efs_file_system" "foo_with_lifecyle_policy" {
+  creation_token = "my-product"
+
+  lifecycle_policy {
+    transition_to_ia = "AFTER_30_DAYS"
+  }
+}
+
+## Argument Reference
+
+- region (Optional): Region where the resource will be managed.
+- availability_zone_name (Optional): AWS Availability Zone for One Zone storage classes.
+- creation_token (Optional): Unique name (max 64 characters) for idempotent file system creation.
+- encrypted (Optional): Enable disk encryption.
+- kms_key_id (Optional): ARN for KMS encryption key (requires encrypted = true).
+- lifecycle_policy (Optional): File system lifecycle policy object.
+- protection (Optional): File system protection object.
+- performance_mode (Optional): Either `generalPurpose` (default) or `maxIO`.
+- provisioned_throughput_in_mibps (Optional): Throughput in MiB/s (with provisioned throughput_mode).
+- tags (Optional): Map of tags to assign.
+- throughput_mode (Optional): Options: `bursting` (default), `provisioned`, or `elastic`.
+
+`lifecycle_policy` block:
+- transition_to_ia (Optional): Transition to IA storage class after specified period (valid values: `AFTER_1_DAY` through `AFTER_365_DAYS`).
+- transition_to_archive (Optional): Transition to archive storage class (requires transition_to_ia, Elastic Throughput, and General Purpose mode).

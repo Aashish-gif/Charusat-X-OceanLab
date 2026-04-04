@@ -1,0 +1,21 @@
+aws_kms_key
+
+## Example Usage
+
+resource "aws_kms_key" "example" {
+  description             = "An example symmetric encryption KMS key"
+  enable_key_rotation     = true
+  deletion_window_in_days = 20
+}
+
+## Argument Reference
+
+- policy (Optional): A valid policy JSON document.
+- customer_master_key_spec (Optional): Key type; defaults to `SYMMETRIC_DEFAULT`.
+- key_usage (Optional): Intended use; defaults to `ENCRYPT_DECRYPT`.
+- description (Optional): Key description.
+- deletion_window_in_days (Optional): Waiting period (7-30 days); defaults to 30.
+- enable_key_rotation (Optional): Enable key rotation; defaults to false.
+- is_enabled (Optional): Enable the key; defaults to true.
+- multi_region (Optional): Multi-Region key; defaults to false.
+- tags (Optional): Tags to assign to the key.
