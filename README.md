@@ -15,7 +15,7 @@ Zenith AI is a state-of-the-art cloud infrastructure automation platform. Build,
 
 | Resource | Link |
 | :--- | :--- |
-| **🚀 Web Application** | [Launch WebApp](https://zenith-ai-ultimate-cloud-syntheses.netlify.app/login)  |
+| **🚀 Web Application** | [Launch WebApp](https://zenith-ai-ultimate-cloud-syntheses.netlify.app/)  |
 | **📺 Demo Video** | [Demo Video](https://drive.google.com/file/d/1hAy1jLsVis7HAkPuOVh5rI5BdAOIGBD2/view?usp=sharing) |
 | **📄 API Documentation** | [Postman Collection](https://documenter.getpostman.com/view/39216526/2sBXc7Kiys) |
 
