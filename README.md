@@ -143,7 +143,7 @@ npm start
 
 ## 📞 Support & Community
 
-*Developed for the Zenith AI-X DAIICT Hackathon.*
+*Developed for the Zenith.*
 
 - **Support**: Reach out via GitHub Issues.
 - **Contributions**: Pull requests are welcome!
